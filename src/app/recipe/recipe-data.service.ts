@@ -3,7 +3,7 @@ import { Recipe } from './recipe.model';
 import { Observable, Subject, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +31,20 @@ export class RecipeDataService {
     return this.http
       .get(`${environment.apiUrl}/recipes/${id}`)
       .pipe(map((rec: any): Recipe => Recipe.fromJSON(rec)));
+  }
+
+  getRecipes$(name?: string, chef?: string, ingredient?: string) {
+    console.log(`getRecipes request with ${name}`);
+    let params = new HttpParams();
+    params = name ? params.append('name', name) : params;
+    params = chef ? params.append('chef', chef) : params;
+    params = ingredient ? params.append('ingredientName', ingredient) : params;
+    return this.http.get(`${environment.apiUrl}/recipes/`, { params }).pipe(
+      catchError(error => {
+        this.loadingError$.next(error.statusText);
+        return of(null);
+      }),
+      map((list: any[]): Recipe[] => list.map(Recipe.fromJSON))
+    );
   }
 }

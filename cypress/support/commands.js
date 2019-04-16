@@ -31,7 +31,7 @@ Cypress.Commands.add('login', () => {
     method: 'POST',
     url: '/api/account',
     body: { email, password: 'P@ssword1111' }
-  }).then(res => localStorage.setItem('currentUser', res.body.token));
+  }).then(res => localStorage.setItem('currentUser', res.body));
 });
 
 Cypress.Commands.add('register', (email, password) => {
@@ -39,5 +39,5 @@ Cypress.Commands.add('register', (email, password) => {
     method: 'POST',
     url: '/api/account/register',
     body: { email, password }
-  }).then(res => localStorage.setItem('currentUser', res.body.token));
+  }).then(res => localStorage.setItem('currentUser', res.body));
 });

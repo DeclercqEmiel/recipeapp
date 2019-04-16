@@ -1,4 +1,7 @@
 describe('My First Test', function() {
+  beforeEach(function() {
+    cy.login();
+  });
   it('our app runs', function() {
     cy.visit('/recipe/add');
     cy.get('button').should('be.disabled');
