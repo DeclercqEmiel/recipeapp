@@ -6,12 +6,12 @@
         (keyup)="filterRecipe$.next($event.target.value)"
         placeholder="filter"
         type="text"
-        #filter
         data-cy="filterInput"
+        [value]="filterRecipeName"
       />
     </mat-form-field>
   </mat-card>
-  <div *ngIf="(recipes$ | async) as recipes; else loadingOrError">
+  <div *ngIf="recipes$ | async as recipes; else loadingOrError">
     <div
       fxLayout="row wrap"
       fxLayout.xs="column"
@@ -20,7 +20,7 @@
     >
       <div
         class="recipe"
-        *ngFor="let recipe of (recipes | recipeFilter: filterRecipeName)"
+        *ngFor="let recipe of recipes | recipeFilter: filterRecipeName"
         fxFlex="0 0 calc(25%-0.5%)"
         fxFlex.xs="100%"
       >
@@ -32,7 +32,7 @@
     <mat-card>
       <mat-error
         data-cy="appError"
-        *ngIf="(loadingError$ | async) as errorMessage; else loading"
+        *ngIf="loadingError$ | async as errorMessage; else loading"
       >
         Error loading the recipe list: {{ errorMessage }}. <br />Please try
         again later.
