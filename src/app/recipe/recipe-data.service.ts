@@ -33,6 +33,12 @@ export class RecipeDataService {
       .pipe(map((rec: any): Recipe => Recipe.fromJSON(rec)));
   }
 
+  updateRecipe(recipe: Recipe) {
+    return this.http
+      .put(`${environment.apiUrl}/recipes/${recipe.id}`, recipe.toJSON())
+      .pipe();
+  }
+
   getRecipes$(name?: string, chef?: string, ingredient?: string) {
     console.log(`getRecipes request with ${name}`);
     let params = new HttpParams();
