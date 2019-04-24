@@ -92,7 +92,7 @@ export class AddRecipeComponent implements OnInit {
     ingredients = ingredients.filter(ing => ing.name.length > 2);
 
     this._recipeDataService
-      .addNewRecipe(new Recipe(this.recipe.value.name, ingredients))
+      .addNewRecipe(new Recipe(this.recipe.value.name, null, ingredients))
       .subscribe();
   }
 
