@@ -12,6 +12,7 @@ import { MaterialModule } from '../material/material.module';
 import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 import { RecipeResolver } from './recipe-resolver';
 import { RouterModule } from '@angular/router';
+import { RatingComponent } from '../rating/rating.component';
 
 const routes = [
   { path: 'list', component: RecipeListComponent },
@@ -25,6 +26,7 @@ const routes = [
 
 @NgModule({
   declarations: [
+    RatingComponent,
     RecipeComponent,
     IngredientComponent,
     AddRecipeComponent,

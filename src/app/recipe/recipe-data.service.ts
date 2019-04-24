@@ -39,8 +39,26 @@ export class RecipeDataService {
       .pipe();
   }
 
+  rateRecipe(recipe: Recipe, rating: number): Observable<number> {
+    return this.http
+      .put(`${environment.apiUrl}/recipes/rate/${recipe.id}/${rating}`, {})
+      .pipe(
+        map((res: any) => {
+          return res['rating'];
+        })
+      );
+  }
+
+  getRecipeRatings(recipes: Recipe[]): Observable<any> {
+    // ask for ratings of a collection of recipes
+    // (the ratings of the logged in user will be returned, whom is known through the jwt token in the http header)
+    const idQueryParam = recipes.map(rec => `id=${rec.id}`).join('&');
+    return this.http.get(
+      `${environment.apiUrl}/recipes/rated/?${idQueryParam}`
+    );
+  }
+
   getRecipes$(name?: string, chef?: string, ingredient?: string) {
-    console.log(`getRecipes request with ${name}`);
     let params = new HttpParams();
     params = name ? params.append('name', name) : params;
     params = chef ? params.append('chef', chef) : params;

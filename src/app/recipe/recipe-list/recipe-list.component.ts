@@ -1,5 +1,6 @@
+import { AuthenticationService } from './../../user/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { RecipeDataService } from '../recipe-data.service';
 import { Observable, Subject } from 'rxjs';
 import { Recipe } from '../recipe.model';
@@ -32,14 +33,30 @@ export class RecipeListComponent implements OnInit {
         debounceTime(250)
       )
       .subscribe(val => {
+        // create a parameter object with a filter property and navigate to that url
+        // e.g. /recipe/list?filter=sp
+        // don't do any filtering here, that happens when we process this new url
         const params = val ? { queryParams: { filter: val } } : undefined;
         this._router.navigate(['/recipe/list'], params);
       });
 
     this._route.queryParams.subscribe(params => {
-      this._recipeDataService
-        .getRecipes$(params['filter'])
-        .subscribe(val => (this.recipes = val));
+      // when the queryparameter changes, take the filter parameter and use it to ask
+      // the service for all recipes with this filter in their name
+      this._recipeDataService.getRecipes$(params['filter']).subscribe(val => {
+        this.recipes = val;
+        // once the recipes are received, we ask for all the ratings of these recipes
+        // and update the recipes with them
+        this._recipeDataService
+          .getRecipeRatings(this.recipes)
+          .subscribe((ratingList: any[]) => {
+            for (const oneRating of ratingList) {
+              const { id, rating } = oneRating;
+              this.recipes.find(rec => rec.id === id).rating = rating;
+            }
+          });
+      });
+      // set the value of the input field with the url parameter as well
       if (params['filter']) {
         this.filterRecipeName = params['filter'];
       }

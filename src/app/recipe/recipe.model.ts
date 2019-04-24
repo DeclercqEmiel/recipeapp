@@ -2,6 +2,7 @@ import { Ingredient } from './ingredient.model';
 
 export class Recipe {
   private _id: number;
+  private _rating: number;
 
   constructor(
     private _name: string,
@@ -49,5 +50,12 @@ export class Recipe {
   }
   addIngredient(name: string, amount?: number, unit?: string) {
     this._ingredients.push(new Ingredient(name, amount, unit));
+  }
+
+  get rating() {
+    return this._rating;
+  }
+  set rating(newRating: number) {
+    this._rating = newRating;
   }
 }

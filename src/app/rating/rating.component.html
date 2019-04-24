@@ -1,0 +1,22 @@
+<div class="rating">
+  <input data-cy="input_5" type="radio" value="5" [checked]="rating === 5" />
+  <label data-cy="rate_5" title="amazing" (click)="onClick(5)">5 stars</label>
+
+  <input data-cy="input_4" type="radio" value="4" [checked]="rating === 4" />
+  <label data-cy="rate_4" title="pretty good" (click)="onClick(4)"
+    >4 stars</label
+  >
+
+  <input data-cy="input_3" type="radio" value="3" [checked]="rating === 3" />
+  <label data-cy="rate_3" title="ok" (click)="onClick(3)">3 stars</label>
+
+  <input data-cy="input_2" type="radio" value="2" [checked]="rating === 2" />
+  <label data-cy="rate_2" title="had better" (click)="onClick(2)"
+    >2 stars</label
+  >
+
+  <input data-cy="input_1" type="radio" value="1" [checked]="rating === 1" />
+  <label data-cy="rate_1" title="the worst ever" (click)="onClick(1)"
+    >1 star</label
+  >
+</div>
