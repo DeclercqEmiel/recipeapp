@@ -4,7 +4,12 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { RecipeDataService } from '../recipe-data.service';
 import { Observable, Subject } from 'rxjs';
 import { Recipe } from '../recipe.model';
-import { distinctUntilChanged, debounceTime, map } from 'rxjs/operators';
+import {
+  distinctUntilChanged,
+  debounceTime,
+  map,
+  switchMap
+} from 'rxjs/operators';
 
 @Component({
   selector: 'app-recipe-list',
@@ -40,10 +45,20 @@ export class RecipeListComponent implements OnInit {
         this._router.navigate(['/recipe/list'], params);
       });
 
-    this._route.queryParams.subscribe(params => {
-      // when the queryparameter changes, take the filter parameter and use it to ask
-      // the service for all recipes with this filter in their name
-      this._recipeDataService.getRecipes$(params['filter']).subscribe(val => {
+    this._route.queryParams
+      .pipe(
+        switchMap(newParams => {
+          // set the value of the input field with the url parameter as well
+          if (newParams['filter']) {
+            this.filterRecipeName = newParams['filter'];
+          }
+          // when the queryparameter changes, take the filter parameter and use it to ask
+          // the service for all recipes with this filter in their name
+          // this._recipeDataService.getRecipes$(params['filter']).subscribe(
+          return this._recipeDataService.getRecipes$(newParams['filter']);
+        })
+      )
+      .subscribe(val => {
         this.recipes = val;
         // once the recipes are received, we ask for all the ratings of these recipes
         // and update the recipes with them
@@ -56,10 +71,5 @@ export class RecipeListComponent implements OnInit {
             }
           });
       });
-      // set the value of the input field with the url parameter as well
-      if (params['filter']) {
-        this.filterRecipeName = params['filter'];
-      }
-    });
   }
 }
