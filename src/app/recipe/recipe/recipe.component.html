@@ -7,11 +7,8 @@
       >added on {{ recipe.dateAdded | date: longDate }}</mat-card-subtitle
     >
     <mat-card-subtitle>
-      <app-rating
-        [rating]="recipe.rating"
-        (ratingClick)="adjustRating($event)"
-      ></app-rating
-    ></mat-card-subtitle>
+      <app-rating [rating]="recipe.rating" #ratingComponent></app-rating>
+    </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <h3 mat-subheader>ingredients</h3>

@@ -27,13 +27,13 @@ describe('ratings fail and reset', function() {
       url: '/api/recipes/rate/1/4',
       status: 500,
       response: ''
-    }).as('rateFail');
+    });
     cy.route({
       method: 'PUT',
       url: '/api/recipes/rate/1/3',
       status: 200,
       response: { id: 1, rating: 3 }
-    }).as('rateSucceed');
+    });
     cy.visit('/');
     cy.get('[data-cy=rate_4]')
       .first()
@@ -41,7 +41,6 @@ describe('ratings fail and reset', function() {
     cy.get('[data-cy=rate_3]')
       .first()
       .click();
-    cy.wait(['@rateFail', '@rateSucceed']);
     cy.get('[data-cy=input_3]')
       .first()
       .should('be.checked');

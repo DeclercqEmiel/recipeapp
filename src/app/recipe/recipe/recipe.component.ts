@@ -11,20 +11,24 @@ import { switchMap } from 'rxjs/operators';
 })
 export class RecipeComponent implements OnInit {
   @Input() public recipe: Recipe;
+  @ViewChild('ratingComponent') public ratingComp: RatingComponent;
 
   constructor(private _recipeDataService: RecipeDataService) {}
 
-  ngOnInit() {}
-
-  adjustRating(clickObj: any): void {
-    this.recipe.rating = clickObj.rating;
-    this._recipeDataService.rateRecipe(this.recipe, clickObj.rating).subscribe(
-      newRating => {
-        this.recipe.rating = newRating;
-      },
-      () => {
-        this.recipe.rating = 0;
-      }
-    );
+  ngOnInit() {
+    this.ratingComp.ratingChange$
+      .pipe(
+        switchMap(newRating => {
+          return this._recipeDataService.rateRecipe(this.recipe, newRating);
+        })
+      )
+      .subscribe(
+        (newRating: number) => {
+          this.recipe.rating = newRating;
+        },
+        () => {
+          this.recipe.rating = 0;
+        }
+      );
   }
 }
